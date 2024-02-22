@@ -1,0 +1,28 @@
+ -- CREATE DATABASE jelou;
+
+-- USE jelou;
+
+-- DROP TABLE IF EXISTS users;
+
+-- CREATE TABLE users (
+--   id INT IDENTITY(1,1) PRIMARY KEY,
+--   name VARCHAR(100),
+--   email VARCHAR(100),
+--   password VARCHAR(100)
+-- );
+
+-- EXEC sp_columns 'users';
+
+
+-- SELECT TOP(500) * FROM [webstore].[dbo].[Users];
+
+-- INSERT DATA
+-- INSERT INTO [webstore].[dbo].[Users] (name) VALUES('user2');
+
+-- GET THE LAST INSERT ID
+-- SELECT SCOPE_IDENTITY()
+
+SELECT COUNT(*) FROM webstore.dbo.Users;
+
+
+ SELECT USER_NAME();

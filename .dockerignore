@@ -1,0 +1,31 @@
+# Dependencias
+node_modules/
+package-lock.json
+
+# Sistema
+.DS_Store
+Thumbs.db
+
+# Archivos y directorios de Git
+.git/
+.gitignore
+
+# Archivos de Entorno
+.env
+.env.*
+
+# Directorios de compilación y distribución
+dist/
+build/
+
+# Archivos de registro
+*.log
+
+# Archivos de configuración de IDE/editor
+.vscode/
+.idea/
+
+# Archivos temporales
+tmp/
+*.tmp
+*.swp
