@@ -6,7 +6,7 @@ Jelou API - User API
 ## Estructura del Proyecto
 
 ```
-nombre-de-la-aplicacion/
+    jelou-api/
 │
 ├── src/                    # Código fuente de la aplicación
 │   ├── api/                # Definiciones de rutas para la API
@@ -15,7 +15,7 @@ nombre-de-la-aplicacion/
 │   ├── models/             # Modelos de datos
 │   └── index.js            # Punto de entrada de la aplicación
 │
-├── terraform/              # Archivos de configuración de Terraform para infraestructura
+├── main.tf                 # Archivos de configuración de Terraform para infraestructura
 │
 ├── .dockerignore           # Archivo para excluir archivos y carpetas del contexto de Docker
 ├── .env.example            # Plantilla para las variables de entorno necesarias
