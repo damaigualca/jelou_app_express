@@ -1,4 +1,4 @@
-name: Deploy Docker Image to AWS ECR
+name: Deploy Docker Image to Docker Hub
 
 on:
   schedule:
@@ -10,34 +10,23 @@ on:
     branches: [ "main" ]
 
 env:
-  IMAGE_NAME: your_ecr_repository_name # Nnombre de tu repositorio en ECR
-  AWS_REGION: us-east-1 
-
+  IMAGE_NAME: jelou 
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
-      id-token: write
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # Instalar AWS CLI v2 y configurar credenciales
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ env.AWS_REGION }}
+      # Login a Docker Hub
+      - name: Login to Docker Hub
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login --username ${{ secrets.DOCKER_USERNAME }} --password-stdin
 
-      # Login a ECR
-      - name: Login to Amazon ECR
-        run: aws ecr get-login-password --region ${{ env.AWS_REGION }} | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com
-
-      # Configuración de Docker Buildx (opcional, útil para builds avanzados)
+      # Configura Docker Buildx (opcional)
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
@@ -46,9 +35,9 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.IMAGE_NAME }}
+          images: ${{ env.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}
 
-      # Construir y subir la imagen Docker a ECR (no empujar en PR)
+      # Construir y subir la imagen Docker a Docker Hub (no empujar en PR)
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
@@ -56,11 +45,3 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-
-      # Opcional: Firma en la imagen de Docker resultante
-      - name: Sign the published Docker image
-        if: ${{ github.event_name != 'pull_request' }}
-        run: |
-          echo "${{ steps.meta.outputs.tags }}" | xargs -I {} cosign sign --yes {}@${{ steps.build-and-push.outputs.digest }}
-        env:
-          COSIGN_EXPERIMENTAL: "true"
