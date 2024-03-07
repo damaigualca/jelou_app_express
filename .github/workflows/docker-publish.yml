@@ -2,15 +2,16 @@ name: Deploy Docker Image to Docker Hub
 
 on:
   schedule:
-    - cron: '18 7 * * *' # Ejecuta a las 7:18 AM todos los días
+    - cron: '18 7 * * *'  # Ejecuta a las 7:18 AM todos los días
   push:
-    branches: [ "main" ]
-    tags: [ 'v*.*.*' ] # Ejecuta en tags de versión semántica
+    branches: ["main"]
+    tags: ['v*.*.*']  # Ejecuta en tags de versión semántica
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
 
 env:
-  IMAGE_NAME: jelou 
+  IMAGE_NAME: jelou
+
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
@@ -35,7 +36,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ${{ env.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}
+          images: ${{ secrets.DOCKER_USERNAME }}/${{ env.IMAGE_NAME }}
 
       # Construir y subir la imagen Docker a Docker Hub (no empujar en PR)
       - name: Build and push Docker image
